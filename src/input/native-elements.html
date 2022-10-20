@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Native Element Example</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content: space-between;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        .questionnaire {
+            margin: 10px;
+        }
+
+        .question-item {
+            padding: 10px;
+            border-bottom: 1px dashed #c0c0c0;
+        }
+
+        .question {
+            font-weight: bold;
+        }
+
+        .submit {
+            margin-top: 10px;
+            margin-left: 45%;
+            width: 200px;
+            height: 36px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div style="height: 50px; background-color: aquamarine;">
+                <div style="position: absolute; height: 50px; margin: 10px; font-size: 20px; font-weight: bold;">
+                    Native Element Example
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="questionnaire">
+                <div class="question-item">
+                    <div class="question">
+                        1. What is the capital of India?
+                    </div>
+                    <div class="answer">
+                        <div>
+                            <input type="radio"> Mumbai <br />
+                            <input type="radio"> New Delhi <br />
+                            <input type="radio"> Chennai <br />
+                            <input type="radio"> Bangalore
+                        </div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <div class="question">
+                        2. Which modes of transport do you use for travel to and from work?
+                    </div>
+                    <div class="answer">
+                        <div>
+                            <input type="checkbox"> Car <br />
+                            <input type="checkbox"> Bus <br />
+                            <input type="checkbox"> Train/Subway <br />
+                            <input type="checkbox"> Bicycle
+                        </div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <div class="question">
+                        3. What is the largest 3 digit number?
+                    </div>
+                    <div class="answer">
+                        <div>
+                            <input type="text">
+                        </div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <div class="question">
+                        4. What is your gender?
+                    </div>
+                    <div class="answer">
+                        <div>
+                            <select name="gender">
+                                <option value="">Please Select</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <div class="question">
+                        5. Please provide your current address.
+                    </div>
+                    <div class="answer">
+                        <div>
+                            <textarea rows="5" cols="75"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="question-item">
+                    <div class="question">
+                        6. Which one of the following is a cat?
+                    </div>
+                    <div class="answer">
+                        <div>
+                            <input type="radio"> <img src="../images/cat.jfif" height="200px" width="250px"> <br />
+                            <input type="radio"> <img src="../images/dog1.jfif" height="200px" width="250px"> <br />
+                            <input type="radio"> <img src="../images/dog2.jfif" height="200px" width="250px"> <br />
+                            <input type="radio"> <img src="../images/dog3.jfif" height="200px" width="250px">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button class="submit">Submit</button>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <div style="height: 50px; background-color: aquamarine;">
+                <div style="position: absolute; margin: 10px; font-size: 20px; font-weight: bold;">
+                    Footer
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>
