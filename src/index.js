@@ -23,21 +23,22 @@ fs.readdir(inputDirectory, function (err, filenames) {
 
 function process(filename, content) {
     const dom = new JSDOM(content, { includeNodeLocations: true });
-    dom.window.document.querySelectorAll('input')?.forEach(function(d) {
+    dom.window.document.querySelectorAll('input')?.forEach(function (d) {
         const inputARIALabelVal = d.getAttribute('aria-label');
-        if(!inputARIALabelVal) {
-            const inputTextVal = d.textContent;
-            d.setAttribute('aria-label', inputTextVal);
+        if (!inputARIALabelVal) {
+            const inputIdVal = d.getAttribute('id');
+            const labelNode = dom.window.document.querySelector('label[for="' + inputIdVal + '"]');
+            d.setAttribute('aria-label', labelNode?.textContent || '');
         }
     });
-    dom.window.document.querySelectorAll('img')?.forEach(function(d) {
+    dom.window.document.querySelectorAll('img')?.forEach(function (d) {
         const altVal = d.getAttribute('alt');
-        if(!altVal) {
+        if (!altVal) {
             const srcVal = d.getAttribute('src');
             d.setAttribute('alt', srcVal.match(/[^\/]+$/)[0]);
         }
     });
-    console.log(dom.serialize());
+    // console.log(dom.serialize());
     writeOutput(filename, dom.serialize());
 }
 
