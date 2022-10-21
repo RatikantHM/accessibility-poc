@@ -23,6 +23,7 @@ fs.readdir(inputDirectory, function (err, filenames) {
 
 function process(filename, content) {
     const dom = new JSDOM(content, { includeNodeLocations: true });
+    // input elements
     dom.window.document.querySelectorAll('input')?.forEach(function (d) {
         const inputARIALabelVal = d.getAttribute('aria-label');
         if (!inputARIALabelVal) {
@@ -31,6 +32,7 @@ function process(filename, content) {
             d.setAttribute('aria-label', labelNode?.textContent || '');
         }
     });
+    // img elements
     dom.window.document.querySelectorAll('img')?.forEach(function (d) {
         const altVal = d.getAttribute('alt');
         if (!altVal) {
