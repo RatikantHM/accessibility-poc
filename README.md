@@ -1,1 +1,1 @@
-Run `npx http-server .` in src folder to start the project.
+Run `npx http-server .` in project folder to start the project.
