@@ -29,7 +29,20 @@ function process(filename, content) {
         if (!inputARIALabelVal) {
             const inputIdVal = d.getAttribute('id');
             const labelNode = dom.window.document.querySelector('label[for="' + inputIdVal + '"]');
-            d.setAttribute('aria-label', labelNode?.textContent || '');
+            if(labelNode?.textContent) {
+                d.setAttribute('aria-label', labelNode?.textContent);
+            } else {
+                const inputPlaceholderVal = d.getAttribute('placeholder');
+                d.setAttribute('aria-label', inputPlaceholderVal);
+            }
+        }
+    });
+    // TextArea
+    dom.window.document.querySelectorAll('textarea')?.forEach(function (d) {
+        const textareaARIALabelVal = d.getAttribute('aria-label');
+        if (!textareaARIALabelVal) {
+            const textareaPlaceholderVal = d.getAttribute('placeholder');
+            d.setAttribute('aria-label', textareaPlaceholderVal);
         }
     });
     // img elements
