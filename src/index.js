@@ -53,6 +53,10 @@ function process(filename, content) {
             d.setAttribute('alt', srcVal.match(/[^\/]+$/)[0]);
         }
     });
+    // button elements
+    dom.window.document.querySelectorAll('button')?.forEach(function (d) {
+        d.setAttribute('aria-label', d?.textContent);
+    });
     // console.log(dom.serialize());
     writeOutput(filename, dom.serialize());
 }
