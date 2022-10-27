@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { readFile, writeFile } = require('fs/promises');
 const jsdom = require('jsdom');
 const report = require('./report');
 
@@ -12,15 +13,12 @@ fs.readdir(srcDirectory + inputDirectory, async function (err, filenames) {
         console.log(err);
         return;
     }
-    filenames.forEach(function (filename) {
-        fs.readFile(srcDirectory + inputDirectory + filename, 'utf-8', async function (err, content) {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            await process(filename, content);
-        });
-    });
+    const results = [];
+    for (const filename of filenames) {
+        const content = await readFile(srcDirectory + inputDirectory + filename, 'utf-8');
+        results.push(await process(filename, content));
+    }
+    await Promise.all(results);
 });
 
 async function process(filename, content) {
@@ -62,13 +60,7 @@ async function process(filename, content) {
         d.setAttribute('aria-label', d?.textContent);
     });
     // Write the content
-    fs.writeFile(srcDirectory + outputDirectory + filename, dom.serialize(), async (err) => {
-        if (err) {
-            console.log(err);
-            return
-        }
-        console.log(srcDirectory + outputDirectory + filename + ' has been created successfully!');
-        // Generate output file report
-        await report.generate('http://localhost:8080/', srcDirectory, outputDirectory, filename);
-    });
+    await writeFile(srcDirectory + outputDirectory + filename, dom.serialize());
+    // Generate output file report
+    await report.generate('http://localhost:8080/', srcDirectory, outputDirectory, filename);
 }
