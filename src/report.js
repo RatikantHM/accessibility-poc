@@ -1,6 +1,7 @@
 const fs = require('fs');
 const lighthouse = require('lighthouse');
 const chromeLauncher = require('chrome-launcher');
+const reportDirectory = 'reports/'
 
 module.exports = {
     generate: async (baseUrl, srcDirectory, fileDirectory, filename) => {
@@ -11,16 +12,16 @@ module.exports = {
         // `.report` is the HTML report as a string
         const reportHtml = runnerResult.report;
         // console.log(reportHtml);
-        fs.writeFile('src/reports/' + fileDirectory + filename, reportHtml, function (err) {
+        fs.writeFile(srcDirectory + reportDirectory + fileDirectory + filename, reportHtml, function (err) {
             if (err) {
                 console.log(err);
-                return
+                return;
             }
         });
 
         // `.lhr` is the Lighthouse Result as a JS object
-        console.log('Report is done for', baseUrl + srcDirectory + fileDirectory + filename);
-        console.log('Performance score was', runnerResult.lhr.categories.accessibility.score * 100);
+        console.log('Report is done for:', baseUrl + srcDirectory + fileDirectory + filename);
+        console.log('Accessibility score was:', runnerResult.lhr.categories.accessibility.score * 100);
 
         await chrome.kill();
     }

@@ -7,7 +7,7 @@ const srcDirectory = 'src/';
 const inputDirectory = 'input/';
 const outputDirectory = 'output/';
 
-fs.readdir(srcDirectory + inputDirectory, function (err, filenames) {
+fs.readdir(srcDirectory + inputDirectory, async function (err, filenames) {
     if (err) {
         console.log(err);
         return;
@@ -18,15 +18,15 @@ fs.readdir(srcDirectory + inputDirectory, function (err, filenames) {
                 console.log(err);
                 return;
             }
-            // Generate the report
-            await report.generate('http://localhost:8080/', srcDirectory, inputDirectory, filename);
             await process(filename, content);
         });
     });
 });
 
 async function process(filename, content) {
-    const dom = new JSDOM(content, { includeNodeLocations: true });
+    // Generate input file report
+    await report.generate('http://localhost:8080/', srcDirectory, inputDirectory, filename);
+    const dom = new JSDOM(content);
     // input elements
     dom.window.document.querySelectorAll('input')?.forEach(function (d) {
         const inputARIALabelVal = d.getAttribute('aria-label');
@@ -63,7 +63,7 @@ async function process(filename, content) {
     });
     // Write the content
     writeOutput(filename, dom.serialize());
-    // Generate the report
+    // Generate output file report
     await report.generate('http://localhost:8080/', srcDirectory, outputDirectory, filename);
 }
 
