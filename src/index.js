@@ -1,27 +1,31 @@
 const fs = require('fs');
 const jsdom = require('jsdom');
+const report = require('./report');
 
 const { JSDOM } = jsdom;
-const inputDirectory = 'src/input/';
-const outputDirectory = 'src/output/';
+const srcDirectory = 'src/';
+const inputDirectory = 'input/';
+const outputDirectory = 'output/';
 
-fs.readdir(inputDirectory, function (err, filenames) {
+fs.readdir(srcDirectory + inputDirectory, function (err, filenames) {
     if (err) {
         console.log(err);
         return;
     }
     filenames.forEach(function (filename) {
-        fs.readFile(inputDirectory + filename, 'utf-8', function (err, content) {
+        fs.readFile(srcDirectory + inputDirectory + filename, 'utf-8', async function (err, content) {
             if (err) {
                 console.log(err);
                 return;
             }
-            process(filename, content);
+            // Generate the report
+            await report.generate('http://localhost:8080/', srcDirectory, inputDirectory, filename);
+            await process(filename, content);
         });
     });
 });
 
-function process(filename, content) {
+async function process(filename, content) {
     const dom = new JSDOM(content, { includeNodeLocations: true });
     // input elements
     dom.window.document.querySelectorAll('input')?.forEach(function (d) {
@@ -29,7 +33,7 @@ function process(filename, content) {
         if (!inputARIALabelVal) {
             const inputIdVal = d.getAttribute('id');
             const labelNode = dom.window.document.querySelector('label[for="' + inputIdVal + '"]');
-            if(labelNode?.textContent) {
+            if (labelNode?.textContent) {
                 d.setAttribute('aria-label', labelNode?.textContent);
             } else {
                 const inputPlaceholderVal = d.getAttribute('placeholder');
@@ -57,16 +61,18 @@ function process(filename, content) {
     dom.window.document.querySelectorAll('button')?.forEach(function (d) {
         d.setAttribute('aria-label', d?.textContent);
     });
-    // console.log(dom.serialize());
+    // Write the content
     writeOutput(filename, dom.serialize());
+    // Generate the report
+    await report.generate('http://localhost:8080/', srcDirectory, outputDirectory, filename);
 }
 
 function writeOutput(filename, content) {
-    fs.writeFile(outputDirectory + filename, content, function (err) {
+    fs.writeFile(srcDirectory + outputDirectory + filename, content, function (err) {
         if (err) {
             console.log(err);
             return
         }
-        console.log(outputDirectory + filename + ' has been created successfully!');
+        console.log(srcDirectory + outputDirectory + filename + ' has been created successfully!');
     });
 }

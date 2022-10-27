@@ -9,7 +9,9 @@
   "author": "Ratikant Sahoo",
   "license": "ISC",
   "devDependencies": {
-    "http-server": "^14.1.1"
+    "chrome-launcher": "^0.15.1",
+    "http-server": "^14.1.1",
+    "lighthouse": "^9.6.7"
   },
   "dependencies": {
     "jsdom": "^20.0.1"
