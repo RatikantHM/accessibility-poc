@@ -13,17 +13,16 @@ fs.readdir(srcDirectory + inputDirectory, async function (err, filenames) {
         console.log(err);
         return;
     }
-    const results = [];
     for (const filename of filenames) {
         const content = await readFile(srcDirectory + inputDirectory + filename, 'utf-8');
-        results.push(await process(filename, content));
+        await process(filename, content);
     }
-    await Promise.all(results);
 });
 
 async function process(filename, content) {
     // Generate input file report
     await report.generate('http://localhost:8080/', srcDirectory, inputDirectory, filename);
+
     const dom = new JSDOM(content);
     // input elements
     dom.window.document.querySelectorAll('input')?.forEach(function (d) {
@@ -59,8 +58,10 @@ async function process(filename, content) {
     dom.window.document.querySelectorAll('button')?.forEach(function (d) {
         d.setAttribute('aria-label', d?.textContent);
     });
+
     // Write the content
     await writeFile(srcDirectory + outputDirectory + filename, dom.serialize());
+    
     // Generate output file report
     await report.generate('http://localhost:8080/', srcDirectory, outputDirectory, filename);
 }
