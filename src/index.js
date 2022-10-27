@@ -62,17 +62,13 @@ async function process(filename, content) {
         d.setAttribute('aria-label', d?.textContent);
     });
     // Write the content
-    writeOutput(filename, dom.serialize());
-    // Generate output file report
-    await report.generate('http://localhost:8080/', srcDirectory, outputDirectory, filename);
-}
-
-function writeOutput(filename, content) {
-    fs.writeFile(srcDirectory + outputDirectory + filename, content, function (err) {
+    fs.writeFile(srcDirectory + outputDirectory + filename, dom.serialize(), async (err) => {
         if (err) {
             console.log(err);
             return
         }
         console.log(srcDirectory + outputDirectory + filename + ' has been created successfully!');
+        // Generate output file report
+        await report.generate('http://localhost:8080/', srcDirectory, outputDirectory, filename);
     });
 }
